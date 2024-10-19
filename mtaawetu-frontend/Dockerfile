@@ -10,13 +10,13 @@ RUN npm install
 
 # Copy the rest of the files and build the app
 COPY . .
-RUN npm run build
+RUN npm run build  # Ensure this generates output in the `dist` directory
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
 # Copy built files to Nginx
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html  # Ensure the output directory is correct
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -26,4 +26,3 @@ EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
-
