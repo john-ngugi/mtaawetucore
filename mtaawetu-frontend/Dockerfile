@@ -15,9 +15,12 @@ RUN npm run build
 # List the contents of the /app/dist directory to confirm the build output
 RUN ls -la /app/dist
 
+
+
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
+RUN chmod -R 755 /usr/share/nginx/html
 # Copy built files to Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
