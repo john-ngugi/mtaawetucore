@@ -20,7 +20,9 @@ RUN ls -la /app/dist
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-RUN chmod -R 755 /usr/share/nginx/html
+# Remove default Nginx files
+RUN rm -rf /usr/share/nginx/html/*
+
 # Copy built files to Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
