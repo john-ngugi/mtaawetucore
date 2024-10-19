@@ -12,8 +12,8 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Debugging step: Check the contents of /app after build
-RUN ls -la /app
+# List the contents of the /app/dist directory to confirm the build output
+RUN ls -la /app/dist
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
