@@ -12,6 +12,9 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+# Debugging step: Check the contents of /app after build
+RUN ls -la /app
+
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
