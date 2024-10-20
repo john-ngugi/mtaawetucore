@@ -69,8 +69,8 @@ REST_FRAMEWORK = {
 # Allow specific origins for security reasons
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  
-    "https://kisii.mtaawetu.com/",# Frontend origin
-    "https://54.174.170.253/"
+    "https://kisii.mtaawetu.com",# Frontend origin
+    "https://54.174.170.253"
 ]
 
 # Allow credentials (cookies, auth headers)
