@@ -26,7 +26,7 @@ function Authentication() {
   };
 
   if (isLoading) {
-    return <Loading>Ok, your good, Granting access. </Loading>; // Show loading component while logging in
+    return <Loading>Ok, you're all set. Granting access...</Loading>; // Show loading component while logging in
   }
 
   return (
