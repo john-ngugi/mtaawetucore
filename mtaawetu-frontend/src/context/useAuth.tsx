@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error("Login failed:", error);
+      alert("Problem Loging in");
       // Optionally, you might want to handle login errors, e.g. show a message to the user
     }
   };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import Loading from "./Loading";
 import { useAuth } from "../context/useAuth";
 
 function Authentication() {
@@ -7,22 +7,31 @@ function Authentication() {
   const [username, setusernames] = useState("");
   const [password, setpassword] = useState("");
   const [cpassword, setCpassword] = useState("");
+  const [isLoading, setLoading] = useState(false);
   // const [message, setmessage] = useState("");
   const [email, setEmail] = useState("");
   const { login_user } = useAuth();
   const { register_user } = useAuth();
-  const handleLogin = () => {
-    login_user(username, password);
-    console.log("clicked");
+
+  const handleLogin = async () => {
+    setLoading(true); // Show loading when login starts
+    await login_user(username, password); // Wait for login to finish
+    setLoading(false); // Hide loading after login
   };
 
-  const handleRegister = () => {
-    register_user(username, password, email, cpassword);
+  const handleRegister = async () => {
+    setLoading(true); // Show loading during registration
+    await register_user(username, password, email, cpassword);
+    setLoading(false); // Hide loading after registration
   };
+
+  if (isLoading) {
+    return <Loading>Ok, your good, Granting access. </Loading>; // Show loading component while logging in
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900">
-      <div className="w-full max-w-md p-8 space-y-4 bg-gray-800 rounded-lg shadow-lg">
+      <div className="w-full ml-3 mr-3 md:m-0 max-w-md p-8 space-y-4 bg-gray-800 rounded-lg shadow-lg">
         {/* <div className="w-full bg-orange-500 p-5 ">{message}</div> */}
         {/* Toggle Tabs */}
         <div className="flex justify-around mb-6">

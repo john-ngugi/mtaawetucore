@@ -120,7 +120,7 @@ const LandingPage = () => {
 
       {/* Map Section */}
       <div className="w-screen h-screen absolute">
-        <div id="map" className="w-full h-full" />
+        <div id="map" className="w-full h-dvh" />
       </div>
       <div id="map" className="w-full h-full" />
       <BottomSlidePanel

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "https://kisii.mtaawetu.com/api/kisii/";
+// const BASE_URL = "http://127.0.0.1:8000/api/kisii/";
 const LOGIN_URL = `${BASE_URL}token/`;
 const REPORT_URL = `${BASE_URL}reports/`;
 const REFRESH_URL = `${BASE_URL}token/refresh/`;
