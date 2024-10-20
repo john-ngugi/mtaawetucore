@@ -1,43 +1,19 @@
 version: "3.8"
-
 services:
   frontend:
     build:
       context: ./mtaawetu-frontend
       dockerfile: Dockerfile
-    expose:
-      - "80" # Exposing port 80 for internal communication
+    ports:
+      - "3000:80"
     depends_on:
       - backend
-
   backend:
     build:
-      context: ./Backend
+      context: ./Backend # Adjust to the actual backend folder if it's different
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
-    expose:
-      - "8000" # Exposing the Django port for internal communication
-    env_file:
-      - ./Backend/.env
-    volumes:
-      - ./Backend:/app # Mount the backend folder
-      - static_volume:/app/staticfiles # Static files location
-      - media_volume:/app/media # Media files location
-
-  nginx:
-    image: nginx:alpine
     ports:
-      - "80:80" # Exposing port 80 to the public
-    depends_on:
-      - frontend
-      - backend
-    volumes:
-      - ./mtaawetu-frontend/nginx.conf:/etc/nginx/conf.d/default.conf # Mount Nginx config
-      - static_volume:/app/staticfiles # Static files served by Nginx
-      - media_volume:/app/media # Media files served by Nginx
-    networks:
-      - default
-
-volumes:
-  static_volume:
-  media_volume:
+      - "8000:8000"
+    env_file:
+      - ./Backend/.env # Path to the backend .env file
