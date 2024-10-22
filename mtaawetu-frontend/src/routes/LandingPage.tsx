@@ -117,15 +117,16 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen z-30">
       {/* Header Section */}
       <Header flyTo={flyTo} handleLogout={handleLogOut} username={username} />
-      <DialogueInstractions username={username} />
+
       {/* Map Section */}
       <div className="w-screen h-screen absolute">
         <div id="map" className="w-full h-dvh" />
       </div>
-      <div className="w-full flex justify-end z-10">
+      <DialogueInstractions username={username} />
+      <div className="w-full flex justify-end ">
         <div className="w-1/2 md:w-1/4 mr-2">
           {/* LayerControl for changing basemaps */}
           <LayerControl onClick={updateMapStyle} />

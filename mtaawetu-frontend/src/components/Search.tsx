@@ -54,11 +54,11 @@ const Search: React.FC<HeaderProps> = ({
 
       {/* Suggestion box (only visible if there are suggestions) */}
       {isVisible && suggestions.length > 0 && (
-        <div className="fixed h-auto mt-11 md:mt-10 z-20 w-80 md:w-96 text-black bg-white shadow-md">
+        <div className="fixed h-auto mt-11 md:mt-10 z-50 w-80 md:w-96 text-black bg-white shadow-md">
           {suggestions.map((location) => (
             <div
               key={location.place_id}
-              className="w-full  hover:bg-gray-50 h-au flex flex-col justify-center cursor-pointer"
+              className="w-full  hover:bg-gray-50 h-au flex flex-col justify-center cursor-pointer z-20"
               onClick={() => handleSuggestionClick(location.lon, location.lat)} // Fly to selected location
             >
               <h1 className="ps-4">{location.display_name}</h1>
