@@ -13,7 +13,7 @@ function KisiiForm({ options, heading, onChange }: Props) {
       <div className="w-full max-w-sm md:max-w-lg min-w-[200px]">
         <div className="relative">
           <select
-            className="w-full bg-gray-800 text-white text-sm border border-gray-300 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm appearance-none cursor-pointer"
+            className="w-full bg-gray-800 text-white text-sm  rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm appearance-none cursor-pointer"
             defaultValue="" // Set the default value to an empty string
             onChange={(e) => onChange(e.target.value)}
           >

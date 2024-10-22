@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loading from "./Loading";
 import { useAuth } from "../context/useAuth";
+import Message from "./MessageLoginRegister";
 
 function Authentication() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,10 +9,18 @@ function Authentication() {
   const [password, setpassword] = useState("");
   const [cpassword, setCpassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-  // const [message, setmessage] = useState("");
   const [email, setEmail] = useState("");
-  const { login_user } = useAuth();
-  const { register_user } = useAuth();
+  const { login_user, register_user, message } = useAuth();
+  const [messageBox, setmessageBox] = useState(false); // Controls visibility of message box
+
+  // Effect to show or hide the message box when the message changes
+  useEffect(() => {
+    if (message) {
+      setmessageBox(true); // Show the message box when there's a message
+    } else {
+      setmessageBox(false); // Hide it when the message is empty
+    }
+  }, [message]);
 
   const handleLogin = async () => {
     setLoading(true); // Show loading when login starts
@@ -32,7 +41,9 @@ function Authentication() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900">
       <div className="w-full ml-3 mr-3 md:m-0 max-w-md p-8 space-y-4 bg-gray-800 rounded-lg shadow-lg">
-        {/* <div className="w-full bg-orange-500 p-5 ">{message}</div> */}
+        {/* Conditionally render message box */}
+        {messageBox && <Message message={message} />}
+
         {/* Toggle Tabs */}
         <div className="flex justify-around mb-6">
           <button
@@ -59,14 +70,14 @@ function Authentication() {
             <h2 className="text-2xl font-bold text-center text-white">Login</h2>
             <div>
               <label
-                htmlFor="login-email"
+                htmlFor="login-username"
                 className="block text-sm font-medium text-white"
               >
                 Username
               </label>
               <input
-                type="email"
-                id="login-email"
+                type="text"
+                id="login-username"
                 className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John Doe"
                 onChange={(e) => setusernames(e.target.value)}
@@ -122,14 +133,14 @@ function Authentication() {
             </h2>
             <div>
               <label
-                htmlFor="login-email"
+                htmlFor="register-username"
                 className="block text-sm font-medium text-white"
               >
                 Username
               </label>
               <input
-                type="email"
-                id="login-email"
+                type="text"
+                id="register-username"
                 className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John Doe"
                 onChange={(e) => setusernames(e.target.value)}
@@ -198,15 +209,3 @@ function Authentication() {
 }
 
 export default Authentication;
-
-// Usage in App.js
-
-// import Authentication from './Authentication';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <Authentication />
-//     </div>
-//   );
-// }

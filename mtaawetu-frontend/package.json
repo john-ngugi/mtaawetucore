@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.10",
+    "@heroicons/react": "^2.1.5",
     "axios": "^1.7.7",
     "lucide-react": "^0.453.0",
     "maplibre-gl": "^4.7.1",

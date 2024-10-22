@@ -5,10 +5,9 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { is_authenticated, login, register } from "../endpoints/api"; // Make sure these imports are correct
+import { is_authenticated, login, register } from "../endpoints/api";
 import { useNavigate } from "react-router-dom";
 
-// Define an interface for the Auth context
 interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
@@ -20,16 +19,19 @@ interface AuthContextType {
     cpassword: string
   ) => Promise<void>;
   username: string;
+  message: string;
 }
 
-// Create the AuthContext with the specified type
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Create the AuthProvider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState("Unknown");
+  const [username, setUsername] = useState(() => {
+    // Retrieve the username from localStorage, or default to "Unknown"
+    return localStorage.getItem("username") || "Unknown";
+  });
+  const [message, setMessage] = useState("");
   const nav = useNavigate();
 
   const get_authenticated = async () => {
@@ -52,12 +54,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (success) {
         setIsAuthenticated(true);
         setUsername(username);
+        localStorage.setItem("username", username); // Save username to localStorage
         nav("/"); // Navigate to home on successful login
+      } else {
+        setMessage("Error! \n User does not exist");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Problem Loging in");
-      // Optionally, you might want to handle login errors, e.g. show a message to the user
+      alert("Problem Logging in\n" + error);
     }
   };
 
@@ -68,19 +72,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     cpassword: string
   ) => {
     try {
-      if (password === cpassword) {
-        try {
-          await register(username, password, email);
-          setIsAuthenticated(true);
-          nav("/"); // Navigate to home on successful login
-        } catch {
-          alert("error registering user");
-        }
-      } else {
-        alert("passwords dont match");
+      // Check if all fields are filled
+      if (!username || !password || !email || !cpassword) {
+        setMessage("All fields are required.");
+        return;
+      }
+
+      // Check if passwords match
+      if (password !== cpassword) {
+        setMessage("Passwords don't match.");
+        return;
+      }
+
+      // Try registering the user if all validations pass
+      try {
+        await register(username, password, email); // Call your registration function
+        setIsAuthenticated(true); // Set the user as authenticated
+        localStorage.setItem("username", username); // Save username to localStorage
+        nav("/"); // Navigate to home on successful registration
+      } catch (error) {
+        // Handle registration errors
+        alert("Error registering user \n" + error);
+        setMessage(
+          "Registration failed. Please check your credentials and try again."
+        );
       }
     } catch (error) {
+      // Handle unexpected errors
       console.error("Registration failed:", error);
+      setMessage(`Unexpected error: ${error}`);
     }
   };
 
@@ -90,7 +110,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, login_user, register_user, username }}
+      value={{
+        isAuthenticated,
+        loading,
+        login_user,
+        register_user,
+        username,
+        message,
+      }}
     >
       {children}
     </AuthContext.Provider>
