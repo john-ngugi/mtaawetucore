@@ -321,7 +321,7 @@ const renderWardSelection = () => {
     <option value="SMS">SMS</option>
     <option value="WhatsApp">WhatsApp</option>
   </select>
-</div>
+</div> 
             <button
               className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
               onClick={handleRegister}
@@ -330,6 +330,11 @@ const renderWardSelection = () => {
             </button>
           </div>
         )}
+                {/* Acknowledgement */}
+        <div className="mt-4 text-xs text-gray-400 text-center">
+          By registering, you acknowledge that your data may be collected and stored by the Municipality 
+          and used solely for the purpose of improving service delivery.
+        </div>
       </div>
     </div>
   );
