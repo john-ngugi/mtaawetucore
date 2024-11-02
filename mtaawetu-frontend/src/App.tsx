@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginComponent from "./routes/Login";
 import LandingPage from "./routes/LandingPage";
 import ReportsPage from "./routes/Reports";
+import Dashboard from "./routes/Dashboard";
 import { AuthProvider } from "./context/useAuth";
 import PrivateRoute from "./components/private_route";
 import LoadingPage from "./routes/LoadingPage";
@@ -35,6 +36,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ReportsPage />
+              </PrivateRoute>
+            }
+          ></Route>
+                    <Route
+            path="/Dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
               </PrivateRoute>
             }
           ></Route>

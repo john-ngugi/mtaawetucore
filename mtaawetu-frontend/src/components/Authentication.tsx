@@ -5,13 +5,21 @@ import Message from "./MessageLoginRegister";
 
 function Authentication() {
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setusernames] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [username, setUsernames] = useState("");
+  const [phonenumber, setPhoneNumber] = useState("");
   const [password, setpassword] = useState("");
   const [cpassword, setCpassword] = useState("");
+  const [isResident, setIsResident] = useState(false);
+  const [communicationMode, setCommunicationMode] = useState("");
+  const [ward, setWard] = useState(""); 
   const [isLoading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
   const { login_user, register_user, message } = useAuth();
   const [messageBox, setmessageBox] = useState(false); // Controls visibility of message box
+
+
+
 
   // Effect to show or hide the message box when the message changes
   useEffect(() => {
@@ -28,12 +36,58 @@ function Authentication() {
     setLoading(false); // Hide loading after login
   };
 
+
   const handleRegister = async () => {
     setLoading(true); // Show loading during registration
-    await register_user(username, password, email, cpassword);
+    await register_user(firstname, lastname, username,phonenumber,password,cpassword,ward,residency,communicationMode);
     setLoading(false); // Hide loading after registration
   };
 
+
+// Toggle residency and set ward to null if not a resident
+const handleCheckboxChange = () => {
+  setIsResident((prev) => {
+    const newResidencyStatus = !prev;
+    if (!newResidencyStatus) {
+      setWard("Kiogoro"); // Clear ward if becoming a non-resident
+    }
+    return newResidencyStatus;
+  });
+};
+
+// Derived variable for displaying residency status
+const residency = isResident ? "Resident" : "Non-resident";
+ // Function to conditionally render the ward selection dropdown
+const renderWardSelection = () => {
+  if (isResident) {
+    return (
+      <div>
+        <label
+          htmlFor="ward-selection"
+          className="block text-sm font-medium text-white"
+        >
+          Select Ward
+        </label>
+        <select
+          id="ward-selection"
+          className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          onChange={(e) => setWard(e.target.value)}
+          value={ward}
+        >
+          <option value="">Choose a ward</option>
+          <option value="Kisii Central">Kisii Central</option>
+          <option value="Kitutu Central">Kitutu Central</option>
+          <option value="Bobaracho">Bobaracho</option>
+          <option value="Kiogoro">Kiogoro</option>
+          <option value="Bogiakumu">Bogiakumu</option>
+          <option value="Nyakoe">Nyakoe</option>
+          <option value="Nyatieko">Nyatieko</option>
+        </select>
+      </div>
+    );
+  }
+  return null;
+};
   if (isLoading) {
     return <Loading>Ok, you're all set. Granting access...</Loading>; // Show loading component while logging in
   }
@@ -80,10 +134,11 @@ function Authentication() {
                 id="login-username"
                 className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John Doe"
-                onChange={(e) => setusernames(e.target.value)}
+                onChange={(e) => setUsernames(e.target.value)}
                 value={username}
               />
             </div>
+            
             <div>
               <label
                 htmlFor="login-password"
@@ -133,36 +188,69 @@ function Authentication() {
             </h2>
             <div>
               <label
+                htmlFor="register-first-name"
+                className="block text-sm font-medium text-white"
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                id="register-first-name"
+                className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                placeholder="John"
+                onChange={(e) => setFirstName(e.target.value)}
+                value={firstname}
+              />
+            </div>
+            <div>
+              <label
                 htmlFor="register-username"
+                className="block text-sm font-medium text-white"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="register-last-name"
+                className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Doe"
+                onChange={(e) => setLastName(e.target.value)}
+                value={lastname}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="login-username"
                 className="block text-sm font-medium text-white"
               >
                 Username
               </label>
               <input
                 type="text"
-                id="register-username"
+                id="login-username"
                 className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John Doe"
-                onChange={(e) => setusernames(e.target.value)}
+                onChange={(e) => setUsernames(e.target.value)}
                 value={username}
               />
             </div>
             <div>
               <label
-                htmlFor="register-email"
+                htmlFor="register-phone-number"
                 className="block text-sm font-medium text-white"
               >
-                Email
+                Phone Number
               </label>
               <input
-                type="email"
-                id="register-email"
+                type="number"
+                id="register-phone-number"
                 className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder="you@example.com"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
+                placeholder="0712345678"
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                value={phonenumber}
               />
             </div>
+            
             <div>
               <label
                 htmlFor="register-password"
@@ -195,6 +283,45 @@ function Authentication() {
                 value={cpassword}
               />
             </div>
+            <div>
+      <label className="block text-sm font-medium text-white">
+        Resident Status <span className="text-xs text-gray-300">(Check if you are a resident)</span>
+      </label>
+      <div className="flex items-center mt-2">
+        <label className="flex items-center text-white">
+          <input
+            type="checkbox"
+            className="mr-2 text-blue-500 focus:ring-blue-500"
+            checked={isResident}
+            onChange={handleCheckboxChange}
+          />
+          Resident
+        </label>
+      </div>
+      <p className="text-xs text-gray-400 mt-1">
+        Status: {isResident ? "Resident" : "Non-resident"}
+      </p>
+    </div>
+    {renderWardSelection()}
+    <div>
+  <label
+    htmlFor="communication-mode"
+    className="block text-sm font-medium text-white"
+  >
+    Preferred Mode of Communication
+  </label>
+  <select
+    id="communication-mode"
+    className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+    onChange={(e) => setCommunicationMode(e.target.value)}
+    value={communicationMode}
+  >
+    <option value="">Choose an option</option>
+    <option value="Call">Call</option>
+    <option value="SMS">SMS</option>
+    <option value="WhatsApp">WhatsApp</option>
+  </select>
+</div>
             <button
               className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
               onClick={handleRegister}

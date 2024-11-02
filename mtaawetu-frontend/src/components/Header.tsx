@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Search from "./Search";
 import { Menu, X } from "lucide-react"; // Import X icon for close
-import { FaFileAlt, FaUserCog } from "react-icons/fa"; // Icons for the menu
+import { FaFileAlt, FaUserCog,FaTachometerAlt } from "react-icons/fa"; // Icons for the menu
 import { useNavigate } from "react-router-dom";
 interface Suggestion {
   place_id: string;
@@ -14,9 +14,10 @@ interface HeaderProps {
   flyTo: (lon: string, lat: string) => void;
   handleLogout: () => void;
   username: string;
+  isSuperUser: boolean;
 }
 
-function Header({ flyTo, handleLogout, username }: HeaderProps) {
+function Header({ flyTo, handleLogout, username, isSuperUser}: HeaderProps) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Track menu open/close state
@@ -42,6 +43,10 @@ function Header({ flyTo, handleLogout, username }: HeaderProps) {
   const handleReports = () => {
     nav("/reports");
   };
+
+  const handleDashboard = () =>{
+    nav("/Dashboard");
+  }
   // Function to get initials from the username
   const getInitials = (name: string) => {
     const initials = name.split(" ");
@@ -52,7 +57,7 @@ function Header({ flyTo, handleLogout, username }: HeaderProps) {
   return (
     <>
       {/* Header Section */}
-      <div className="w-screen h-1/4 relative z-10 bg-gray-900 text-white flex flex-row justify-between">
+      <div className="w-screen h-20 relative z-10 bg-gray-900 text-white flex flex-row justify-between">
         <div className="w-80">
           <Search
             searchQuery={searchQuery}
@@ -98,9 +103,11 @@ function Header({ flyTo, handleLogout, username }: HeaderProps) {
 
           {/* Navigation Links */}
           <nav className="flex-grow p-4">
-            {/* <a href="#" className="flex items-center p-2 hover:bg-gray-700">
-              <FaTachometerAlt className="mr-2" /> Dashboard
-            </a> */}
+          {isSuperUser && (
+              <a href="#" className="flex items-center p-2 hover:bg-gray-700" onClick={handleDashboard}>
+                <FaTachometerAlt className="mr-2" /> Dashboard
+              </a>
+            )}
             <a
               href="#"
               className="flex items-center p-2 hover:bg-gray-700"

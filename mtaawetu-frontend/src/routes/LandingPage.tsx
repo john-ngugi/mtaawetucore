@@ -1,34 +1,80 @@
 import { useEffect, useState, useRef } from "react";
 import maplibregl, { ScaleControl } from "maplibre-gl";
+import BasemapControl from 'maplibre-basemaps';
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useNavigate } from "react-router-dom";
-import { get_reports, logout } from "../endpoints/api";
+import { get_reports, logout,get_all_reports} from "../endpoints/api";
 import BottomSlidePanel from "../components/BottomSlidePanel";
 import Header from "../components/Header";
 import { useAuth } from "../context/useAuth";
-import LayerControl from "../components/LayerControl";
+// import LayerControl from "../components/LayerControl";
 import AnimatedMarker from "../components/AnimatedMarker"; // Import the new marker component
 import DialogueInstractions from "../components/DialogueInstructions";
+import axios from "axios";
+import {GET_USER_INFO} from "../endpoints/api"
 const LandingPage = () => {
-  const MAPTILER_KEY = "Zk2vXxVka5bwTvXQmJ0l";
+  // const MAPTILER_KEY = "Zk2vXxVka5bwTvXQmJ0l";
   const mapRef = useRef<maplibregl.Map | null>(null);
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
   const [selectedLng, setSelectedLng] = useState<number | null>(null);
   const [isVisible, setIsPanelVisible] = useState(false);
+  const [isSuperUser, setSuperUser] =  useState(false);
   const { username } = useAuth();
+  
+  // const storedStaffStatus = localStorage.getItem("staffStatus");
   const nav = useNavigate();
 
-  const mapStyles = {
-    Streets: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
-    Satellite: `https://api.maptiler.com/maps/hybrid/style.json?key=${MAPTILER_KEY}`,
-    Light: `https://api.maptiler.com/maps/streets-v2-light/style.json?key=${MAPTILER_KEY}`,
-    Dark: `https://api.maptiler.com/maps/streets-v2-dark/style.json?key=${MAPTILER_KEY}`,
-  };
+  // const mapStyles = {
+  //   Streets: `https://api.maptiler.com/maps/openstreetmap/style.json?key=${MAPTILER_KEY}`,
+  //   Satellite: `https://api.maptiler.com/maps/hybrid/style.json?key=${MAPTILER_KEY}`,
+  //   Light: `https://api.maptiler.com/maps/streets-v2-light/style.json?key=${MAPTILER_KEY}`,
+  //   Dark: `https://api.maptiler.com/maps/streets-v2-dark/style.json?key=${MAPTILER_KEY}`,
+  //   three_D: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`
+  // };
+  const googleMaps= {
+    name: "Google Maps",
+    tiles: ['https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'],
+    maxzoom: 13,
+    minZoom:9,
+    attribution: 'Tiles &copy; Google',
+}
+  const osm = {
+    name: "Open Street Map",
+    tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+    maxzoom: 18,
+    attribution: 'osm'
+}
+const osmCycle = {
+    name: "OSM Cycle",
+    tiles: ['https://a.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'],
+}
+
+const baseLayers = {
+    osm,
+    osmCycle,
+    googleMaps,
+}
+
 
   useEffect(() => {
-    const fetchReports = async () => {
-      const reports = await get_reports();
-      localStorage.setItem("userReports", JSON.stringify(reports));
+    
+    const getUserStatus = async () => {
+    const userInfo = GET_USER_INFO()
+    const response = axios.post(userInfo, { withCredentials: true , username:username});
+    return response;
+    }
+
+    const fetchReports = async () => { 
+        const userData = await getUserStatus()
+        console.log("UserData",userData);
+        setSuperUser(userData.data.user_info.is_superuser === true)
+        if(userData.data.user_info.is_superuser === true){
+          const reports = await get_all_reports();
+          localStorage.setItem("userReports", JSON.stringify(reports));
+        }else{
+          const reports = await get_reports();
+          localStorage.setItem("userReports", JSON.stringify(reports));
+        }
     };
     fetchReports();
   }, []);
@@ -40,13 +86,13 @@ const LandingPage = () => {
     }
   };
 
-  const updateMapStyle = (styleName: string) => {
-    if (mapRef.current) {
-      const selectedStyle =
-        mapStyles[styleName as keyof typeof mapStyles] || mapStyles.Streets;
-      mapRef.current.setStyle(selectedStyle);
-    }
-  };
+  // const updateMapStyle = (styleName: string) => {
+  //   if (mapRef.current) {
+  //     const selectedStyle =
+  //       mapStyles[styleName as keyof typeof mapStyles] || mapStyles.Streets;
+  //     mapRef.current.setStyle(selectedStyle);
+  //   }
+  // };
 
   useEffect(() => {
     if (mapRef.current) {
@@ -54,19 +100,22 @@ const LandingPage = () => {
     }
 
     const map = new maplibregl.Map({
-      style: mapStyles["Streets"], // Default style
+      // style: mapStyles["Streets"], // Default style
       center: [34.7716, -0.6764], // Coordinates for Nairobi, Kenya
       zoom: 15.5,
-      pitch: 60,
-      bearing: -17.6,
+      // pitch: 60,
+      // bearing: -17.6,
       container: "map",
       antialias: true,
+      maxZoom:22,
+      minZoom:9,
     });
 
     mapRef.current = map;
 
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");
-
+    const basemapControl = new BasemapControl({ basemaps: baseLayers, initialBasemap: "googleMaps"});
+    map.addControl(basemapControl, 'bottom-right');
     const scale = new ScaleControl({
       maxWidth: 80,
       unit: "metric",
@@ -82,7 +131,7 @@ const LandingPage = () => {
       setIsPanelVisible(true);
       map.flyTo({
         center: [coordinates.lng, coordinates.lat],
-        zoom: 19,
+        zoom: 17.2,
         speed: 0.4,
       });
     };
@@ -111,7 +160,7 @@ const LandingPage = () => {
       mapRef.current.flyTo({
         center: [parseFloat(lon), parseFloat(lat)],
         essential: true,
-        zoom: 15.5,
+        zoom: 16.5,
       });
     }
   };
@@ -119,19 +168,19 @@ const LandingPage = () => {
   return (
     <div className="flex flex-col min-h-screen z-30">
       {/* Header Section */}
-      <Header flyTo={flyTo} handleLogout={handleLogOut} username={username} />
+      <Header flyTo={flyTo} handleLogout={handleLogOut} username={username} isSuperUser={isSuperUser} />
 
       {/* Map Section */}
-      <div className="w-screen h-screen absolute">
-        <div id="map" className="w-full h-dvh" />
+      <div className="w-screen h-full absolute">
+        <div id="map" className="w-full h-full" />
       </div>
       <DialogueInstractions username={username} />
-      <div className="w-full flex justify-end ">
+      {/* <div className="w-full flex justify-end ">
         <div className="w-1/2 md:w-1/4 mr-2">
-          {/* LayerControl for changing basemaps */}
+          
           <LayerControl onClick={updateMapStyle} />
         </div>
-      </div>
+      </div> */}
 
       {/* Animated Marker */}
       {/* Render AnimatedMarker only if coordinates are selected and not in satellite view */}

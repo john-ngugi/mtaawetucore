@@ -7,16 +7,23 @@ import {
 } from "react";
 import { is_authenticated, login, register } from "../endpoints/api";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import {GET_USER_INFO} from "../endpoints/api"
 
 interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
   login_user: (username: string, password: string) => Promise<void>;
   register_user: (
+    firstname:string,
+    lastname:string,
     username: string,
     password: string,
-    email: string,
-    cpassword: string
+    cpassword: string,
+    phonenumber: string,
+    ward : string,
+    residency: string,
+    communicationMode:string,
   ) => Promise<void>;
   username: string;
   message: string;
@@ -45,6 +52,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // get_user_infomation()
+  const getUserStatus = async () => {
+    const userInfo = GET_USER_INFO()
+    const response = axios.post(userInfo, { withCredentials: true , username:username});
+    return response;
+    }
+
   const login_user = async (
     username: string,
     password: string
@@ -55,7 +69,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsAuthenticated(true);
         setUsername(username);
         localStorage.setItem("username", username); // Save username to localStorage
-        nav("/"); // Navigate to home on successful login
+        const userData = await getUserStatus()
+        if(userData.data.user_info.is_superuser === true){
+        nav("/Dashboard"); // Navigate to home on successful login
+        }else{
+          nav("/")
+        }
       } else {
         setMessage("Error! \n User does not exist");
       }
@@ -66,18 +85,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const register_user = async (
+    firstname:string,
+    lastname:string,
     username: string,
+    phonenumber: string,
     password: string,
-    email: string,
-    cpassword: string
+    cpassword: string,
+    ward : string,
+    residency: string,
+    communicationMode:string,
+    
   ) => {
     try {
       // Check if all fields are filled
-      if (!username || !password || !email || !cpassword) {
+      if (!username || !password || !phonenumber || !cpassword) {
         setMessage("All fields are required.");
         return;
       }
-
+      console.log("confirmation password",cpassword)
       // Check if passwords match
       if (password !== cpassword) {
         setMessage("Passwords don't match.");
@@ -86,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Try registering the user if all validations pass
       try {
-        await register(username, password, email); // Call your registration function
+        await register(firstname,lastname,username,phonenumber,password,ward,residency,communicationMode); // Call your registration function
         setIsAuthenticated(true); // Set the user as authenticated
         localStorage.setItem("username", username); // Save username to localStorage
         nav("/"); // Navigate to home on successful registration

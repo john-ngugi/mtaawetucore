@@ -34,7 +34,7 @@ export default function MyModal({ username }: Props) {
   return (
     <>
       {/* Button to open the modal manually */}
-      <div className="fixed inset-0 flex items-center justify-start h-10 mt-24 mr-52 ml-2">
+      <div className="fixed inset-0 flex items-center justify-start h-10 mt-28 mr-52 ml-2">
         <button
           type="button"
           onClick={openModal}

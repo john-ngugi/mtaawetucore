@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://kisii.mtaawetu.com/api/kisii/";
-// const BASE_URL = "http://127.0.0.1:8000/api/kisii/";
+// const BASE_URL = "https://kisii.mtaawetu.com/api/kisii/";
+const BASE_URL = "http://127.0.0.1:8001/api/kisii/";
 const LOGIN_URL = `${BASE_URL}token/`;
 const REPORT_URL = `${BASE_URL}reports/`;
 const REFRESH_URL = `${BASE_URL}token/refresh/`;
@@ -9,6 +9,14 @@ const LOGOUT_URL = `${BASE_URL}logout/`;
 const AUTH_URL = `${BASE_URL}authenticated/`;
 const REGISTER_URL = `${BASE_URL}register/`;
 const MAKE_REPORT_URL = `${BASE_URL}make_report/`;
+const GET_ALL_REPORTS = `${BASE_URL}reports/all/`;
+
+
+
+export const GET_USER_INFO = () =>
+{
+  return `${BASE_URL}getUserInfo/`
+}
 
 export const login = async (username: any, password: any) => {
   const response = await axios.post(
@@ -41,6 +49,12 @@ export const get_reports = async () => {
   }
 };
 
+
+export const get_all_reports = async () =>{
+    const response = await axios.get(GET_ALL_REPORTS);
+    return response.data;
+}
+
 const call_refresh = async (error: any, func: any) => {
   if (error.response && error.response.status === 401) {
     const tokenRefreshed = await refresh_token();
@@ -65,18 +79,23 @@ export const logout = async () => {
 
 export const is_authenticated = async () => {
   try {
-    await axios.post(AUTH_URL, {}, { withCredentials: true });
-    return true;
+    const response = await axios.post(AUTH_URL, {}, { withCredentials: true });
+    return response.data;
   } catch (error) {
     return false;
   }
 };
 
-export const register = async (username: any, password: any, email: any) => {
+export const register = async (firstname:any,lastname:any,username: any,phonenumber: any, password: any,ward:any,residency:any,communicationMode:any ,) => {
   const response = await axios.post(REGISTER_URL, {
+    firstname:firstname,
+    lastname:lastname,
     username: username,
+    phonenumber:phonenumber,
     password: password,
-    email: email,
+    ward:ward,
+    residency:residency,
+    communicationMode:communicationMode,
   });
   console.log("Response from register API:", response.data); // Add this line to inspect response
   return response.data;
@@ -87,7 +106,8 @@ export const make_report = async (
   lat: any,
   grivance_description: any,
   category_of_grivance: any,
-  category_of_complaint: any
+  category_of_complaint: any,
+  subOption:any,
 ) => {
   try {
     const response = await axios.post(
@@ -98,6 +118,7 @@ export const make_report = async (
         category_of_complaint: category_of_complaint,
         category_of_grivance: category_of_grivance,
         grivance_description: grivance_description,
+        suboption:subOption,
       },
       { withCredentials: true }
     );
