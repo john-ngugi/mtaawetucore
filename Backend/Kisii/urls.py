@@ -11,6 +11,8 @@ urlpatterns = [
     path("logout/",logout),
     path("register/",register),
     path("authenticated/",is_authenticated),
-    path("make_report/",make_report)
+    path("make_report/",make_report),
+    path('reports/all/', get_all_reports, name='get_all_reports'),
+    path('getUserInfo/',getUserInfoIfAuth,name='get-user-info'),
 ]
 
