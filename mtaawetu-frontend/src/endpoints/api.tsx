@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://kisii.mtaawetu.com/api/kisii/";
-// const BASE_URL = "http://127.0.0.1:8001/api/kisii/";
+// const BASE_URL = "https://kisii.mtaawetu.com/api/kisii/";
+const BASE_URL = "http://127.0.0.1:8001/api/kisii/";
 const LOGIN_URL = `${BASE_URL}token/`;
 const REPORT_URL = `${BASE_URL}reports/`;
 const REFRESH_URL = `${BASE_URL}token/refresh/`;
@@ -86,7 +86,7 @@ export const is_authenticated = async () => {
   }
 };
 
-export const register = async (firstname:any,lastname:any,username: any,phonenumber: any, password: any,ward:any,residency:any,communicationMode:any ,) => {
+export const register = async (firstname:any,lastname:any,username: any,phonenumber: any, password: any,ward:any,residency:any,communicationMode:any) => {
   const response = await axios.post(REGISTER_URL, {
     firstname:firstname,
     lastname:lastname,

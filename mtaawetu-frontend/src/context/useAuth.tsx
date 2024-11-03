@@ -70,8 +70,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUsername(username);
         localStorage.setItem("username", username); // Save username to localStorage
         const userData = await getUserStatus()
+        console.log(userData)
         if(userData.data.user_info.is_superuser === true){
-        nav("/Dashboard"); // Navigate to home on successful login
+          nav("/Dashboard"); // Navigate to home on successful login
         }else{
           nav("/")
         }
@@ -102,7 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setMessage("All fields are required.");
         return;
       }
-      console.log("confirmation password",cpassword)
+      
       // Check if passwords match
       if (password !== cpassword) {
         setMessage("Passwords don't match.");

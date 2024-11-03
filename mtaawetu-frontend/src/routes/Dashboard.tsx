@@ -69,30 +69,30 @@ const Dashboard: React.FC = () => {
 
       {/* Cards Section */}
       <div className="flex flex-wrap justify-around p-5">
-        <div className="bg-gray-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
+        <div className="bg-green-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
           <h3 className="font-semibold text-lg">Total Reports</h3>
           <p className="text-3xl font-bold">{totalReports}</p>
         </div>
-        <div className="bg-gray-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
+        <div className="bg-orange-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
           <h3 className="font-semibold text-lg">Most Common Grievance</h3>
           <p className="text-xl">{mostCommonGrievance || "N/A"}</p>
         </div>
-        <div className="bg-gray-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
-          <h3 className="font-semibold text-lg">Most Common Complaint</h3>
+        <div className="bg-purple-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
+          <h3 className="font-semibold text-lg">Most Common Complainant</h3>
           <p className="text-xl">{mostCommonComplaint || "N/A"}</p>
         </div>
-        <div className="bg-gray-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
+        <div className="bg-blue-700 shadow-md rounded-lg p-6 m-2 w-full sm:w-1/5 text-center">
           <h3 className="font-semibold text-lg">Pending Grievances</h3>
           <p className="text-3xl font-bold">{pendingCount}</p>
         </div>
       </div>
 
       {/* Reports Table */}
-      <div className="flex flex-col w-full p-5">
+      <div className="flex flex-col w-full p-1">
         <div className="bg-gray-700 shadow-md rounded-t-md p-5 flex flex-wrap justify-between ml-5 mr-5">
         <div className="w-full flex flex-wrap justify-between sticky  bg-gray-700 z-10 ml-5 mr-5">
-            <h2 className="font-semibold text-sm w-full md:w-1/5">id</h2>
-            <h2 className="font-semibold text-sm w-full md:w-1/5">Complaint</h2>
+            {/* <h2 className="font-semibold text-sm w-full md:w-1/5">id</h2> */}
+            <h2 className="font-semibold text-sm w-full md:w-1/5">Complainant</h2>
             <h2 className="font-semibold text-sm w-full md:w-1/5">Grievance</h2>
             <h2 className="font-semibold text-sm w-full md:w-1/5">Date</h2>
             <h2 className="font-semibold text-sm w-full md:w-1/5">Status</h2>

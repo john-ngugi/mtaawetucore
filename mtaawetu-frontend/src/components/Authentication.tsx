@@ -303,32 +303,32 @@ const renderWardSelection = () => {
       </p>
     </div>
     {renderWardSelection()}
-    <div>
-  <label
-    htmlFor="communication-mode"
-    className="block text-sm font-medium text-white"
-  >
-    Preferred Mode of Communication
-  </label>
-  <select
-    id="communication-mode"
-    className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-    onChange={(e) => setCommunicationMode(e.target.value)}
-    value={communicationMode}
-  >
-    <option value="">Choose an option</option>
-    <option value="Call">Call</option>
-    <option value="SMS">SMS</option>
-    <option value="WhatsApp">WhatsApp</option>
-  </select>
-</div> 
-            <button
-              className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-              onClick={handleRegister}
-            >
-              Register
-            </button>
-          </div>
+      <div>
+        <label
+          htmlFor="communication-mode"
+          className="block text-sm font-medium text-white"
+        >
+          Preferred Mode of Communication
+        </label>
+        <select
+          id="communication-mode"
+          className="w-full px-3 py-2 mt-1 text-gray-900 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          onChange={(e) => setCommunicationMode(e.target.value)}
+          value={communicationMode}
+        >
+          <option value="">Choose an option</option>
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="WhatsApp">WhatsApp</option>
+        </select>
+      </div> 
+      <button 
+        className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+        onClick={handleRegister}
+      >
+        Register
+      </button>
+  </div>
         )}
                 {/* Acknowledgement */}
         <div className="mt-4 text-xs text-gray-400 text-center">
