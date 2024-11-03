@@ -7,8 +7,8 @@ import {
 } from "react";
 import { is_authenticated, login, register } from "../endpoints/api";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import {GET_USER_INFO} from "../endpoints/api"
+// import axios from "axios";
+// import {GET_USER_INFO} from "../endpoints/api"
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -53,11 +53,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // get_user_infomation()
-  const getUserStatus = async () => {
-    const userInfo = GET_USER_INFO()
-    const response = axios.post(userInfo, { withCredentials: true , username:username});
-    return response;
-    }
+  // const getUserStatus = async () => {
+  //   const userInfo = GET_USER_INFO()
+  //   const response = axios.post(userInfo, { withCredentials: true , username:username});
+  //   return response;
+  //   }
 
   const login_user = async (
     username: string,
@@ -68,14 +68,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (success) {
         setIsAuthenticated(true);
         setUsername(username);
-        localStorage.setItem("username", username); // Save username to localStorage
-        const userData = await getUserStatus()
-        console.log(userData)
-        if(userData.data.user_info.is_superuser === true){
-          nav("/Dashboard"); // Navigate to home on successful login
-        }else{
-          nav("/")
-        }
+        localStorage.setItem("username", username);// Save username to localStorage
+        nav("/") 
+        // const userData = await getUserStatus()
+        // console.log(userData)
+        // if(userData.data.user_info.is_superuser === true){
+        //   nav("/Dashboard"); // Navigate to home on successful login
+        // }else{
+        //   nav("/")
+        // }
       } else {
         setMessage("Error! \n User does not exist");
       }
