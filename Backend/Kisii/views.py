@@ -84,7 +84,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         
         
 @api_view(["POST"])
-
+@permission_classes([AllowAny])
 def logout(request):
     try:
         res = Response()
