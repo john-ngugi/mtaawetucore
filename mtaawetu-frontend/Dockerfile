@@ -18,7 +18,7 @@ COPY --from=build /app/dist .
 
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-ENV PORT=${PORT:-8080}
+#ENV PORT=${PORT:-8080}
 
 EXPOSE 8080
 
