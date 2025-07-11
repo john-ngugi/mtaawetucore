@@ -1,11 +1,23 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
+    id: Build Frontend
     dir: 'mtaawetu-frontend'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/frontend', '-f', 'Dockerfile', '.']
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/frontend',
+      '-f', 'Dockerfile',
+      '.'
+    ]
 
   - name: 'gcr.io/cloud-builders/docker'
+    id: Build Backend
     dir: 'Backend'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend', '-f', 'Dockerfile', '.']
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/backend',
+      '-f', 'Dockerfile',
+      '.'
+    ]
 
 images:
   - 'gcr.io/$PROJECT_ID/frontend'
